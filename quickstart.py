@@ -19,7 +19,8 @@ from google.auth.transport.requests import Request
 SEND_SCOPE = 'https://www.googleapis.com/auth/gmail.send'
 # SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 READ_ONLY = 'https://www.googleapis.com/auth/gmail.readonly'
-SCOPES = [SEND_SCOPE, READ_ONLY]
+MODIFY_SCOPE = 'https://www.googleapis.com/auth/gmail.modify'
+SCOPES = [SEND_SCOPE, READ_ONLY, MODIFY_SCOPE]
 
 def main():
     """Shows basic usage of the Gmail API.
