@@ -149,9 +149,52 @@ def getUnReadMessages():
             subject= [i['value'] for i in headers if i["name"]=="Subject"]
             print(subject)
 
+            s = getSender(msg)
+            print(s)
+
             msgs.append(msg)
 
         return msgs
+
+def getSubject(msg):
+    "Returns subject from given message"
+
+    return getHeaderInfo(msg, 'Subject')
+    # headers=msg["payload"]["headers"]
+    # subject= [i['value'] for i in headers if i["name"]=="Subject"]
+    # assert len(subject) < 2
+    # if len(subject) > 0:
+    #     return subject[0]
+    # else:
+    #     return None
+
+def getSender(msg):
+    return getHeaderInfo(msg, 'From')
+
+def getHeaderInfo(msg, infoType):
+    "Returns subject from given message"
+
+    headers=msg["payload"]["headers"]
+    subject= [i['value'] for i in headers if i["name"]==infoType]
+    assert len(subject) < 2
+    if len(subject) > 0:
+        return subject[0]
+    else:
+        return None
+
+def readSpecialEmails(subj, sender, markAsRead=True):
+    "Gets unread emails, and marks special ones as read"
+    msgs = getUnReadMessages()
+    msgs = [m for m in msgs if getSubject(m) == subj and getSender(m) == sender]
+    print("found %d special messages" % len(msgs))
+
+    # mark each of these as read
+    if markAsRead:
+        userId = 'me'
+        service = getService()
+        for msg in msgs:
+            # This will mark the messagea as read
+            service.users().messages().modify(userId=userId, id=msg['id'],body={ 'removeLabelIds': ['UNREAD']}).execute() 
 
 def testSendMessage():
     # if os.path.exists('token.pickle'):
@@ -168,7 +211,9 @@ def testSendMessage():
     send_message(service, 'me', msg)
 
 def main():
-    getUnReadMessages()
+    
+    from settings import SUBJ, SENDER
+    readSpecialEmails(SUBJ, SENDER)
 
 if __name__ == "__main__":
     main()
