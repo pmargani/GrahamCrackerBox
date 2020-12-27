@@ -174,6 +174,9 @@ def getSender(msg):
 def getHeaderInfo(msg, infoType):
     "Returns subject from given message"
 
+    if msg is None:
+        return None
+
     headers=msg["payload"]["headers"]
     subject= [i['value'] for i in headers if i["name"]==infoType]
     assert len(subject) < 2
@@ -185,6 +188,9 @@ def getHeaderInfo(msg, infoType):
 def readSpecialEmails(subj, sender, markAsRead=True):
     "Gets unread emails, and marks special ones as read"
     msgs = getUnReadMessages()
+    if msgs is None:
+        print("found no unread messages")
+        return None
     msgs = [m for m in msgs if getSubject(m) == subj and getSender(m) == sender]
     print("found %d special messages" % len(msgs))
 
@@ -195,6 +201,8 @@ def readSpecialEmails(subj, sender, markAsRead=True):
         for msg in msgs:
             # This will mark the messagea as read
             service.users().messages().modify(userId=userId, id=msg['id'],body={ 'removeLabelIds': ['UNREAD']}).execute() 
+
+    return msgs
 
 def testSendMessage():
     # if os.path.exists('token.pickle'):
