@@ -1,0 +1,9 @@
+# /home/pi/crontabs/runCrackerBox
+echo "runCrackerBox!"
+cd /home/pi/sandbox/GrahamCrackerBox/master/GrahamCrackerBox
+source /home/pi/sandbox/GrahamCrackerBox/master/cracker-env/bin/activate
+echo `pwd`
+echo `which python`
+touch lastTime.txt
+python piCamera.py > piCamera.out 2>&1
+echo "runCrackerBox Done"
