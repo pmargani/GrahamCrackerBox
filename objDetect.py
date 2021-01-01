@@ -33,8 +33,8 @@ def detectFace(imgFile):
 
     return detectObj(imgFile, xmlFile)
 
-def testDetectFace():
-    fn = "face.jpg"
+def testDetectFace(fn):
+    # fn = "face.jpg"
 
     faces = detectFace(fn)
 
@@ -48,7 +48,7 @@ def testDetectFace():
     cv2.destroyAllWindows()        
 
 def main():
-	testDetectFace()
+	testDetectFace('face.jgp')
 
 if __name__ == '__main__':
 	main()
